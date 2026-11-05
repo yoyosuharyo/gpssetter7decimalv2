@@ -1,0 +1,189 @@
+# https://github.com/marketplace/actions/automated-build-android-app-with-github-action
+# https://github.com/marketplace/actions/publish-release
+
+name: Generate APK
+
+env:
+  main_project_module: app
+  target_owner: Xposed-Modules-Repo
+  target_repo: io.github.kovag1978_oss.gpssetter
+  target_path: target_path
+
+on:
+  push:
+    branches:
+      - 'release/**'
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'v*.*.*'
+        required: true
+        type: string
+  # schedule:
+  #   - cron: '0 0 1 */2 *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set TAG
+        if: github.event_name == 'push'
+        run: |
+          echo "version=$(echo '${{ github.ref_name }}' | awk -F 'v' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Set TAG
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "version=$(echo '${{ inputs.version }}' | awk -F 'v' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Set ENV
+        run: | 
+          echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV;
+          echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Use JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17' # 21
+          cache: 'gradle'
+
+      - name: Build
+        env:
+          STORE: ${{ secrets.STORE }}
+          LOCAL: ${{ secrets.LOCAL }}
+        run: |
+          set -euo pipefail
+          test -n "$STORE"
+          test -n "$LOCAL"
+          trap 'rm -f upload.jks signing.properties' EXIT
+          printf '%s' "$STORE" | base64 --decode > upload.jks
+          printf '%s' "$LOCAL" | base64 --decode > signing.properties
+          chmod +x ./gradlew;
+          ./gradlew :app:assembleFossRelease :app:assembleFullRelease --stacktrace
+
+      # - name: Upload
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.repository_name }} - ${{ env.date_today }}
+      #     path: ${{ env.main_project_module }}/build/outputs/apk/
+
+      - name: Publish (GitHub)
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: v${{ env.version }}
+          tag_name: v${{ env.version }}
+          body: |
+            ## Changes
+            - Spoof the cached last location and the location handed to a listener on registration, so apps no longer briefly see the real position when opening a map.
+            - Spoof locations at the final system delivery step, covering all listeners and PendingIntents.
+            - Spoof Location parcels leaving hooked processes (e.g. Google Play Services to apps).
+            - In spoofed apps, hide Wi-Fi scan results and cell tower info so map SDKs cannot locate the device by radio signals.
+
+            ## Изменения
+            - Подмена кэшированной последней геопозиции и геопозиции, выдаваемой слушателю при регистрации: приложения больше не видят реальное место при открытии карты.
+            - Подмена геопозиции на последнем шаге системной доставки (все слушатели и PendingIntent).
+            - Подмена Location при передаче между процессами (например, из сервисов Google Play в приложения).
+            - В приложениях с подменой скрываются результаты сканирования Wi-Fi и данные сотовых вышек, чтобы SDK карт не определяли место по радиосигналам.
+          files: |
+            ${{ env.main_project_module }}/build/outputs/apk/foss/release/app-foss-arm64-v8a-release.apk
+            ${{ env.main_project_module }}/build/outputs/apk/full/release/app-full-arm64-v8a-release.apk
+
+      - name: Publish (Xposed)
+        if: vars.LSPOSED_REPO_READY == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: Xposed-Modules-Repo/io.github.kovag1978_oss.gpssetter
+          name: v${{ env.version }}
+          tag_name: v${{ env.version }}
+          body: |
+            ## Changes
+            - Spoof the cached last location and the location handed to a listener on registration, so apps no longer briefly see the real position when opening a map.
+            - Spoof locations at the final system delivery step, covering all listeners and PendingIntents.
+            - Spoof Location parcels leaving hooked processes (e.g. Google Play Services to apps).
+            - In spoofed apps, hide Wi-Fi scan results and cell tower info so map SDKs cannot locate the device by radio signals.
+
+            ## Изменения
+            - Подмена кэшированной последней геопозиции и геопозиции, выдаваемой слушателю при регистрации: приложения больше не видят реальное место при открытии карты.
+            - Подмена геопозиции на последнем шаге системной доставки (все слушатели и PendingIntent).
+            - Подмена Location при передаче между процессами (например, из сервисов Google Play в приложения).
+            - В приложениях с подменой скрываются результаты сканирования Wi-Fi и данные сотовых вышек, чтобы SDK карт не определяли место по радиосигналам.
+          files: |
+            ${{ env.main_project_module }}/build/outputs/apk/foss/release/app-foss-arm64-v8a-release.apk
+            ${{ env.main_project_module }}/build/outputs/apk/full/release/app-full-arm64-v8a-release.apk
+
+      - name: Checkout
+        if: vars.LSPOSED_REPO_READY == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.target_owner }}/${{ env.target_repo }}
+          path: ${{ env.target_path }}
+          token: ${{ secrets.PAT }}
+          # sparse-checkout: |
+          #     README.md
+          # sparse-checkout-cone-mode: false
+      
+      - name: Sync
+        if: vars.LSPOSED_REPO_READY == 'true'
+        run: |
+          cd ${{ env.target_path }}
+          cp ../README.md ../README.ru.md ../LICENSE .
+          printf '%s\n' "https://github.com/${GITHUB_REPOSITORY}" > SOURCE_URL
+          printf '%s\n' "Voice-switch saved locations from Quick Settings; spoof GPS system-wide or per app." > SUMMARY
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md README.ru.md LICENSE SOURCE_URL SUMMARY
+          git commit --amend --no-edit
+          git push --force
+      
+      # - name: Get latest release
+      #   id: get_release
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       const latestRelease = await github.repos.getLatestRelease({
+      #       owner: ${{ env.owner }},
+      #       repo: ${{ env.repo }}
+      #       });
+      #       return latestRelease.data;
+
+      # - name: Download release assets
+      #   run: |
+      #     mkdir -p release-assets
+      #     for asset in $(jq -r '.assets[].browser_download_url' <<< "${{ steps.get_release.outputs.result }}"); do
+      #       filename=$(basename $asset)
+      #       curl -L -o release-assets/$filename $asset
+      #       if [[ $filename == app-foss*.apk ]]; then
+      #         echo "foss=$filename" >> $GITHUB_ENV
+      #       elif [[ $filename == app-full*.apk ]]; then
+      #         echo "full=$filename" >> $GITHUB_ENV
+      #       fi
+      #     done
+
+      # - name: Create a new release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ steps.get_release.outputs.result.tag_name }}
+      #     release_name: ${{ steps.get_release.outputs.result.name }}
+      #     body: ${{ steps.get_release.outputs.result.body }}
+      #     draft: false
+      #     prerelease: false
+
+      # - name: Publish
+      #   uses: actions/upload-release-asset@v1.0.1
+      #   env:
+      #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: release-assets/${{ env.full }}
+      #     asset_name: ${{ env.full }}
+      #     asset_content_type: application/zip
