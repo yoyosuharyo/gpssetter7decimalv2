@@ -80,7 +80,30 @@ jobs:
             } > signing.properties
           fi
           chmod +x ./gradlew
-          ./gradlew :app:assembleFossRelease :app:assembleFullRelease --stacktrace
+          status=0
+          ./gradlew :app:assembleFossRelease :app:assembleFullRelease --stacktrace --console=plain 2>&1 \
+            | tee gradle-build.log || status=$?
+          if [ "$status" -ne 0 ]; then
+            # Put the real cause into the run's Annotations, not just "exit code 1".
+            {
+              grep -E '^e: |error: |AAPT: error|Could not (resolve|GET|find)|OutOfMemoryError|Java heap space|Metaspace|daemon disappeared' gradle-build.log | sort -u | head -15
+              sed -n '/What went wrong/,/^\* Try/p' gradle-build.log | head -15
+            } > gradle-summary.txt || true
+            summary="$(head -c 3000 gradle-summary.txt)"
+            summary="${summary//'%'/'%25'}"
+            summary="${summary//$'\r'/'%0D'}"
+            summary="${summary//$'\n'/'%0A'}"
+            echo "::error title=Gradle build failed (exit ${status})::${summary}"
+            exit "$status"
+          fi
+
+      - name: Upload build log (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: gradle-build-log
+          path: gradle-build.log
+          if-no-files-found: ignore
 
       - name: Upload APKs
         uses: actions/upload-artifact@v5
