@@ -355,6 +355,6 @@ class VoiceCommandResultReceiver : BroadcastReceiver() {
         private const val SECOND_STEP_DELAY_MILLIS = 2_500L
         private const val SYSTEM_TARGET = "@system"
         const val ACTION_PROCESS_RESULTS =
-            "io.github.kovag1978_oss.gpssetter.action.PROCESS_VOICE_RESULTS"
+            "io.github.yoyosuharyo.gpssetter.action.PROCESS_VOICE_RESULTS"
     }
 }

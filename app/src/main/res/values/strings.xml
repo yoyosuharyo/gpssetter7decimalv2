@@ -39,7 +39,7 @@
 
     <!-- About -->
     <string name="about">About</string>
-    <string name="about_info">Fork maintained by @kovag1978-oss; based on work by \n@jqssun (2024-2025) and \n@Android1500 (2022-2023). \n\nA GPS setter based on the Xposed framework.</string>
+    <string name="about_info">Fork maintained by @yoyosuharyo (7-decimal coordinate output); based on work by \n@kovag1978-oss, \n@jqssun (2024-2025) and \n@Android1500 (2022-2023). \n\nA GPS setter based on the Xposed framework.</string>
 
     <!-- Update -->
     <string name="update_button">Update</string>

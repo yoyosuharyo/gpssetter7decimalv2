@@ -33,7 +33,7 @@
     <string name="error_xposed_module_missing">Модуль Xposed не включён</string>
     <string name="error_xposed_module_missing_desc">Включите этот модуль в LSPosed Manager</string>
     <string name="about">О программе</string>
-    <string name="about_info">Форк поддерживается @kovag1978-oss; основан на работе\n@jqssun (2024–2025) и\n@Android1500 (2022–2023).\n\nУстановка GPS-координат на основе фреймворка Xposed.</string>
+    <string name="about_info">Форк поддерживается @yoyosuharyo (вывод координат с 7 знаками); основан на работе\n@kovag1978-oss,\n@jqssun (2024–2025) и\n@Android1500 (2022–2023).\n\nУстановка GPS-координат на основе фреймворка Xposed.</string>
     <string name="update_button">Обновить</string>
     <string name="update_available">Доступно обновление</string>
     <string name="update_available_message">%1$s\n\n%2$s</string>

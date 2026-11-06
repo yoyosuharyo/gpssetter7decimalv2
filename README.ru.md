@@ -2,10 +2,10 @@
 
 [English](README.md) | [Русский](README.ru.md)
 
-[![Последний релиз](https://img.shields.io/github/v/release/kovag1978-oss/android_gps_setter)](https://github.com/kovag1978-oss/android_gps_setter/releases/latest)
-[![Загрузки](https://img.shields.io/github/downloads/kovag1978-oss/android_gps_setter/total)](https://github.com/kovag1978-oss/android_gps_setter/releases)
-[![Лицензия: GPL-3.0](https://img.shields.io/github/license/kovag1978-oss/android_gps_setter)](LICENSE)
-[![Открытые задачи](https://img.shields.io/github/issues/kovag1978-oss/android_gps_setter)](https://github.com/kovag1978-oss/android_gps_setter/issues)
+[![Последний релиз](https://img.shields.io/github/v/release/yoyosuharyo/gpssetter7decimalv2)](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest)
+[![Загрузки](https://img.shields.io/github/downloads/yoyosuharyo/gpssetter7decimalv2/total)](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases)
+[![Лицензия: GPL-3.0](https://img.shields.io/github/license/yoyosuharyo/gpssetter7decimalv2)](LICENSE)
+[![Открытые задачи](https://img.shields.io/github/issues/yoyosuharyo/gpssetter7decimalv2)](https://github.com/yoyosuharyo/gpssetter7decimalv2/issues)
 
 GPS Setter — Xposed-модуль для подмены геолокации на Android. Можно задать координаты для всей системы или назначить отдельные координаты выбранным приложениям. Все активные подменённые местоположения отображаются на карте. Избранные места можно выбирать голосом через плитку быстрых настроек Android; пока подмена работает, foreground service поддерживает видимый статус.
 
@@ -13,14 +13,14 @@ GPS Setter — Xposed-модуль для подмены геолокации н
 
 ## Скачать
 
-Последние arm64 APK доступны на странице [релизов GitHub](https://github.com/kovag1978-oss/android_gps_setter/releases/latest):
+Последние arm64 APK доступны на странице [релизов GitHub](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest):
 
 | Вариант | Карты | Провайдер Fused Location | Скачать |
 | --- | --- | --- | --- |
-| **Full** | Google Maps | Сервисы Google Play | [APK Full](https://github.com/kovag1978-oss/android_gps_setter/releases/latest/download/app-full-arm64-v8a-release.apk) |
-| **FOSS** | MapLibre | microG | [APK FOSS](https://github.com/kovag1978-oss/android_gps_setter/releases/latest/download/app-foss-arm64-v8a-release.apk) |
+| **Full** | Google Maps | Сервисы Google Play | [APK Full](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest/download/app-full-arm64-v8a-release.apk) |
+| **FOSS** | MapLibre | microG | [APK FOSS](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest/download/app-foss-arm64-v8a-release.apk) |
 
-Текущий ID приложения: `io.github.kovag1978_oss.gpssetter`. До v0.0.9 использовался другой ID — `io.github.kovag1978oss.gpssetter`. Android считает их разными приложениями, поэтому перед установкой v0.0.9 или новее удалите старую версию. Её данные автоматически не переносятся.
+ID приложения: `io.github.yoyosuharyo.gpssetter`. Он отличается от исходного проекта, поэтому Android считает это отдельным приложением: удалите другие сборки GPS Setter и заново включите модуль в LSPosed.
 
 ## Настройка
 
@@ -79,6 +79,5 @@ GPS Setter — Xposed-модуль для подмены геолокации н
 
 ## Поддержка
 
-Если GPS Setter оказался вам полезен, вы можете [поддержать проект на GitHub](https://github.com/sponsors/kovag1978-oss).
 
 Лицензия: [GPL-3.0-only](LICENSE).

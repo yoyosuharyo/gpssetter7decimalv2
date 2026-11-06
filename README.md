@@ -2,11 +2,11 @@
 
 [English](README.md) | [Русский](README.ru.md)
 
-[![Latest release](https://img.shields.io/github/v/release/kovag1978-oss/android_gps_setter)](https://github.com/kovag1978-oss/android_gps_setter/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/kovag1978-oss/android_gps_setter/total)](https://github.com/kovag1978-oss/android_gps_setter/releases)
-[![License: GPL-3.0](https://img.shields.io/github/license/kovag1978-oss/android_gps_setter)](LICENSE)
-[![Open issues](https://img.shields.io/github/issues/kovag1978-oss/android_gps_setter)](https://github.com/kovag1978-oss/android_gps_setter/issues)
-[![LSPosed module](https://img.shields.io/badge/LSPosed-Module-blue)](https://modules.lsposed.org/module/io.github.kovag1978_oss.gpssetter/)
+[![Latest release](https://img.shields.io/github/v/release/yoyosuharyo/gpssetter7decimalv2)](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/yoyosuharyo/gpssetter7decimalv2/total)](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases)
+[![License: GPL-3.0](https://img.shields.io/github/license/yoyosuharyo/gpssetter7decimalv2)](LICENSE)
+[![Open issues](https://img.shields.io/github/issues/yoyosuharyo/gpssetter7decimalv2)](https://github.com/yoyosuharyo/gpssetter7decimalv2/issues)
+[![LSPosed module](https://img.shields.io/badge/LSPosed-Module-blue)](https://modules.lsposed.org/module/io.github.yoyosuharyo.gpssetter/)
 
 GPS Setter is an Xposed location-spoofing module for Android. Set a location system-wide or assign independent coordinates to selected apps. Active spoofed locations are shown on the map, favorites can be selected by voice from Android Quick Settings, and a foreground service keeps the active-spoofing status visible while spoofing is running.
 
@@ -14,14 +14,14 @@ GPS Setter is an Xposed location-spoofing module for Android. Set a location sys
 
 ## Download
 
-Download the latest arm64 APK from [GitHub Releases](https://github.com/kovag1978-oss/android_gps_setter/releases/latest):
+Download the latest arm64 APK from [GitHub Releases](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest):
 
 | Variant | Maps | Fused location provider | Download |
 | --- | --- | --- | --- |
-| **Full** | Google Maps | Google Play services | [Full APK](https://github.com/kovag1978-oss/android_gps_setter/releases/latest/download/app-full-arm64-v8a-release.apk) |
-| **FOSS** | MapLibre | microG | [FOSS APK](https://github.com/kovag1978-oss/android_gps_setter/releases/latest/download/app-foss-arm64-v8a-release.apk) |
+| **Full** | Google Maps | Google Play services | [Full APK](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest/download/app-full-arm64-v8a-release.apk) |
+| **FOSS** | MapLibre | microG | [FOSS APK](https://github.com/yoyosuharyo/gpssetter7decimalv2/releases/latest/download/app-foss-arm64-v8a-release.apk) |
 
-The current application ID is `io.github.kovag1978_oss.gpssetter`. Releases before v0.0.9 used a different ID (`io.github.kovag1978oss.gpssetter`); Android treats them as separate apps, so uninstall the older app before installing v0.0.9 or later. Its data is not transferred automatically.
+The application ID is `io.github.yoyosuharyo.gpssetter`. It differs from the upstream project, so Android treats it as a separate app: uninstall any other GPS Setter build first and re-enable this module in LSPosed.
 
 ## Setup
 
@@ -80,6 +80,5 @@ The module hooks Android location APIs, including `Location` and `LocationManage
 
 ## Support
 
-If GPS Setter is useful to you, you can [sponsor the project on GitHub](https://github.com/sponsors/kovag1978-oss).
 
 Licensed under [GPL-3.0-only](LICENSE).

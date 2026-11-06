@@ -22,7 +22,7 @@ def releaseSigningConfigured = ['keyAlias', 'keyPassword', 'storeFile', 'storePa
 android {
     compileSdk 34
     defaultConfig {
-        applicationId "io.github.kovag1978_oss.gpssetter"
+        applicationId "io.github.yoyosuharyo.gpssetter"
         minSdk 27
         targetSdk 34
         versionCode 15
